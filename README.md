@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="500" height="500" alt="Emblema Literário Baracata em Azul Neon" src="https://github.com/user-attachments/assets/bd442e2c-18ff-43fb-8fc6-7b3cc3cb0478" />
+</p>
+
 # Baracata
 
 Aplicativo Android para **preparar anúncios de livros usados**. Você aponta a câmera para o código de barras (ISBN), e o app preenche título, autor, editora, ano, páginas, sinopse e capa. Depois organiza as fotos, gera o texto do anúncio e ajuda a controlar em quais lojas cada livro já foi cadastrado.
