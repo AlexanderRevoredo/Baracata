@@ -1,0 +1,118 @@
+-- Itens à venda. Uma linha por item (uma unidade).
+-- atualizado_em: sobe a cada edição (e nunca repete); ordena a lista por mais recente.
+-- sincronizado_revisao: sobra de quando havia sincronização com servidor; não é mais usada (fica NULL).
+-- ATENÇÃO: colunas novas entram SEMPRE no fim da tabela, na mesma ordem das migrações (.sqm),
+-- porque o SQLite devolve "SELECT *" na ordem física das colunas.
+CREATE TABLE item (
+    id TEXT NOT NULL PRIMARY KEY,
+    categoria TEXT NOT NULL,
+    titulo TEXT NOT NULL,
+    conservacao TEXT NOT NULL DEFAULT '',
+    preco_centavos INTEGER,
+    descricao TEXT NOT NULL DEFAULT '',
+    criado_em INTEGER NOT NULL,
+    atualizado_em INTEGER NOT NULL,
+    sincronizado_revisao INTEGER,
+    estado TEXT NOT NULL DEFAULT ''
+);
+
+CREATE TABLE item_atributo (
+    item_id TEXT NOT NULL,
+    nome TEXT NOT NULL,
+    valor TEXT NOT NULL,
+    PRIMARY KEY (item_id, nome)
+);
+
+-- Fotos do item. O arquivo da imagem fica fora do banco (pasta privada do app);
+-- aqui só o registro: ordem (posicao 0 = capa), nome do arquivo e tamanho.
+CREATE TABLE foto (
+    id TEXT NOT NULL PRIMARY KEY,
+    item_id TEXT NOT NULL,
+    posicao INTEGER NOT NULL,
+    arquivo TEXT NOT NULL,
+    tamanho INTEGER NOT NULL
+);
+
+-- Em quais lojas/sites o livro já foi anunciado (a pessoa marca na lista).
+CREATE TABLE item_loja (
+    item_id TEXT NOT NULL,
+    loja TEXT NOT NULL,
+    PRIMARY KEY (item_id, loja)
+);
+
+-- Preferências do aparelho (ex.: tema). Não são apagadas por "Apagar dados".
+CREATE TABLE configuracao (
+    chave TEXT NOT NULL PRIMARY KEY,
+    valor TEXT NOT NULL
+);
+
+listar:
+SELECT * FROM item ORDER BY atualizado_em DESC;
+
+listarAtributos:
+SELECT * FROM item_atributo;
+
+buscarRevisao:
+SELECT atualizado_em FROM item WHERE id = ?;
+
+inserir:
+INSERT INTO item (id, categoria, estado, titulo, conservacao, preco_centavos, descricao, criado_em, atualizado_em, sincronizado_revisao)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL);
+
+atualizar:
+UPDATE item
+SET categoria = ?, estado = ?, titulo = ?, conservacao = ?, preco_centavos = ?, descricao = ?, atualizado_em = ?
+WHERE id = ?;
+
+excluirAtributosDoItem:
+DELETE FROM item_atributo WHERE item_id = ?;
+
+inserirAtributo:
+INSERT OR REPLACE INTO item_atributo (item_id, nome, valor) VALUES (?, ?, ?);
+
+excluirItem:
+DELETE FROM item WHERE id = ?;
+
+excluirTodosItens:
+DELETE FROM item;
+
+excluirTodosAtributos:
+DELETE FROM item_atributo;
+
+
+
+
+
+listarFotos:
+SELECT * FROM foto ORDER BY item_id, posicao;
+
+inserirFoto:
+INSERT INTO foto (id, item_id, posicao, arquivo, tamanho) VALUES (?, ?, ?, ?, ?);
+
+excluirFotosDoItem:
+DELETE FROM foto WHERE item_id = ?;
+
+excluirTodasFotos:
+DELETE FROM foto;
+
+
+listarLojas:
+SELECT * FROM item_loja;
+
+inserirLoja:
+INSERT OR REPLACE INTO item_loja (item_id, loja) VALUES (?, ?);
+
+excluirLojasDoItem:
+DELETE FROM item_loja WHERE item_id = ?;
+
+excluirTodasLojas:
+DELETE FROM item_loja;
+
+contar:
+SELECT COUNT(*) FROM item;
+
+lerConfiguracao:
+SELECT valor FROM configuracao WHERE chave = ?;
+
+salvarConfiguracao:
+INSERT OR REPLACE INTO configuracao (chave, valor) VALUES (?, ?);

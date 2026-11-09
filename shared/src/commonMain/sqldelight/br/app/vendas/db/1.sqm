@@ -1,0 +1,7 @@
+-- Migração da versão 1 para a 2: estado do item (Novo/Seminovo/Usado) e preferências.
+ALTER TABLE item ADD COLUMN estado TEXT NOT NULL DEFAULT '';
+
+CREATE TABLE configuracao (
+    chave TEXT NOT NULL PRIMARY KEY,
+    valor TEXT NOT NULL
+);

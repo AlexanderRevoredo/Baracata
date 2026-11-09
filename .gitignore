@@ -1,0 +1,12 @@
+.gradle/
+build/
+local.properties
+*.jks
+*.keystore
+.kotlin/
+.idea/workspace.xml
+assinatura/keystore.properties
+assinatura/
+*.apk
+Material/
+**/build/

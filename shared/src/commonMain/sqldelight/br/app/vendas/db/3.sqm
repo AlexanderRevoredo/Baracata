@@ -1,0 +1,5 @@
+CREATE TABLE item_loja (
+    item_id TEXT NOT NULL,
+    loja TEXT NOT NULL,
+    PRIMARY KEY (item_id, loja)
+);

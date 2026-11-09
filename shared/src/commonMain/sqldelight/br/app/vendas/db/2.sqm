@@ -1,0 +1,7 @@
+CREATE TABLE foto (
+    id TEXT NOT NULL PRIMARY KEY,
+    item_id TEXT NOT NULL,
+    posicao INTEGER NOT NULL,
+    arquivo TEXT NOT NULL,
+    tamanho INTEGER NOT NULL
+);
